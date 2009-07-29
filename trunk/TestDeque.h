@@ -27,12 +27,25 @@ struct TestDeque : CppUnit::TestFixture {
     // -----
     // tests
     // -----
-
+    void test_def_constructor1(){
+      My::Deque<int> x;
+    }
+    void test_val_constructor1(){
+      My::Deque<int> x(1);
+    }
+    void test_val_constructor2(){
+      My::Deque<int> x(10, 10);
+    }
     // -----
     // suite
     // -----
 
     CPPUNIT_TEST_SUITE(TestDeque);
+
+    CPPUNIT_TEST(test_def_constructor1);
+    CPPUNIT_TEST(test_val_constructor1);
+    CPPUNIT_TEST(test_val_constructor2);
+
     CPPUNIT_TEST_SUITE_END();};
 
 #endif // TestDeque_h

@@ -54,7 +54,7 @@ BI uninitialized_copy (A& a, II b, II e, BI x) {
             ++b;
             ++x;}}
     catch (...) {
-        my_destroy(a, p, x);
+        destroy(a, p, x);
         throw;}
     return x;}
 
@@ -70,7 +70,7 @@ BI uninitialized_fill (A& a, BI b, BI e, const U& v) {
             a.construct(&*b, v);
             ++b;}}
     catch (...) {
-        my_destroy(a, p, b);
+        destroy(a, p, b);
         throw;}
     return e;}
 
@@ -128,19 +128,21 @@ class Deque {
         // ----
 
         allocator_type a;
-
-        char[] ca;
+	
+	pointer b_a; // beginning of the real heap array
 	pointer b; // beginning value of the deque
 	pointer e; // one past the end of the ending element of deque
-	pointer l; // one past the end of the real array (ca)
-
+	pointer e_a; // one past the end of the real array (ca)
+	
+	size_type d_size;
     private:
         // -----
         // valid
         // -----
 
         bool valid () const {
-            return (!b && !e) || (b < l && e < l) }
+            return (!b && !e && !b_a && !e_a) || 
+	    (b_a < e_a && b < e_a && e < e_a); }
     public:
         // --------
         // iterator
@@ -167,23 +169,21 @@ class Deque {
                  */
                 friend bool operator == (const iterator& lhs, const iterator& rhs) {
                     // <your code>
-                    return false;}
+                    return lhs.p == rhs.p;}
 
             private:
                 // ----
                 // data
                 // ----
 
-                // <your data>
-
+		pointer p;
             private:
                 // -----
                 // valid
                 // -----
 
                 bool valid () const {
-                    // <your code>
-                    return true;}
+                    return (b_a <= p && p >= e_a);}
 
             public:
                 // -----------
@@ -193,8 +193,7 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-                iterator (/* <your arguments> */) {
-                    // <your code>
+                iterator (pointer p) : p(p) {
                     assert(valid());}
 
                 // Default copy, destructor, and copy assignment.
@@ -210,10 +209,7 @@ class Deque {
                  * <your documentation>
                  */
                 reference operator * () const {
-                    // <your code>
-                    // dummy is just to be able to compile the skeleton, remove it
-                    static value_type dummy;
-                    return dummy;}
+                    return *p;}
 
                 // -----------
                 // operator ->
@@ -233,8 +229,14 @@ class Deque {
                  * <your documentation>
                  */
                 iterator& operator ++ () {
-                    // <your code>
-                    assert(valid());
+                    if( b != e){
+		     if( (b+1) == e_a ){
+		     //wrap around 
+		     b = b_a;
+		     }
+		     ++b;
+		    }
+		    assert(valid());
                     return *this;}
 
                 /**
@@ -309,7 +311,8 @@ class Deque {
                  * <your documentation>
                  */
                 iterator operator - (difference_type d) const {
-                    return iterator(*this) -= d;}};
+                    return iterator(*this) -= d;}
+		    };
 
     public:
         // --------------
@@ -489,15 +492,21 @@ class Deque {
         /**
          * <your documentation>
          */
-        explicit Deque (const allocator_type& a = allocator_type()) {
-            // <your code>
-            assert(valid());}
+        explicit Deque (const allocator_type& a = allocator_type()) : a(a) {
+            b = e = b_a = e_a = 0;
+	    d_size = 0;
+	    assert(valid());}
 
         /**
          * <your documentation>
          */
-        explicit Deque (size_type s, const_reference v = value_type(), const allocator_type& a = allocator_type()) {
-            // <your code>
+        explicit Deque (size_type s, const_reference v = value_type(), const allocator_type& a = allocator_type()) : a(a) {
+            d_size = s;
+	    b_a = this->a.allocate(s);
+	    e_a = b_a + s;
+	    uninitialized_fill(this->a, b_a, e_a, v);
+	    b = b_a +  ( (e_a - b_a)  / 2);
+	    e = b;
             assert(valid());}
 
         /**
@@ -513,9 +522,11 @@ class Deque {
 
         /**
          * <your documentation>
+	 * FIXME: don't forget to implement iterator to do the right thing
          */
         ~Deque () {
-            // <your code>
+            destroy(this->a, iterator(b), iterator(e) );
+	    a.deallocate(b_a, (e_a - b_a) );
             assert(valid());}
 
         // ----------
@@ -596,7 +607,7 @@ class Deque {
          */
         iterator begin () {
             // <your code>
-            return iterator(/* <your arguments> */);}
+            return iterator( b );}
 
         /**
          * <your documentation>
@@ -743,7 +754,7 @@ class Deque {
          */
         size_type size () const {
             // <your code>
-            return 0;}
+            return d_size;}
 
         // ----
         // swap
