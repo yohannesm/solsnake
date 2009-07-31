@@ -184,7 +184,7 @@ class Deque {
                 // -----
 
                 bool valid () const {
-                    return (deque_ptr -> b_a <= p && p >= deque_ptr->e_a);}
+                    return ( p >= (deque_ptr-> b_a)  &&  p <= (deque_ptr->e_a) ) ;}
 
             public:
                 // -----------
@@ -194,10 +194,11 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-					iterator (Deque<value_type>* d_arg, pointer d_ptr){
-					deque_ptr = d_arg;
-					p = d_ptr;
-					assert(valid());}
+		iterator (Deque<value_type>* d_arg, pointer d_ptr){
+			deque_ptr = d_arg;
+			p = d_ptr;
+			assert(valid());
+			}
 
                 // Default copy, destructor, and copy assignment.
                 // iterator (const iterator&);
@@ -233,13 +234,13 @@ class Deque {
                  */
                 iterator& operator ++ () {
                     if(p!=e){
-					if((p+1)== deque_ptr->e_a ){
-						 //wrap around 
-						 p = deque_ptr->b_a;
-						}
-					 ++p;
+			if((p+1)== deque_ptr->e_a ){
+			 //wrap around 
+			 p = deque_ptr->b_a;
 					}
-					assert(valid());
+			 ++p;
+			}
+			assert(valid());
                     return *this;}
 
                 /**
@@ -260,11 +261,10 @@ class Deque {
                  */
                 iterator& operator -- () {
                     if(p == deque_ptr->b_a ){
-						 //wrap around 
-						 p = deque_ptr->(e_a-1);
-						}
-					 --p;
-					}
+			//wrap around 
+			 p = (deque_ptr->e_a) - 1 ;
+			}
+			 --p;
                     assert(valid());
                     return *this;}
 
@@ -286,8 +286,11 @@ class Deque {
                  */
                 iterator& operator += (difference_type d) {
                     difference_type a = d % (deque_ptr->d_size);
-					// <your code>
-                    assert(valid());
+                    while(a){
+		    ++(*this);
+		    --a;
+		      }
+		    assert(valid());
                     return *this;}
 
                 // ----------
@@ -308,7 +311,11 @@ class Deque {
                  * <your documentation>
                  */
                 iterator& operator -= (difference_type d) {
-                    // <your code>
+                    difference_type a = d % (deque_ptr->d_size);
+                    while(a){
+		    --(*this);
+		    --a;
+		      }
                     assert(valid());
                     return *this;}
 
@@ -355,17 +362,18 @@ class Deque {
                 // ----
                 // data
                 // ----
-
-                // <your data>
-
+		friend class Deque;
+		const Deque<value_type>* deque_ptr;
+		pointer p;
+		
             private:
                 // -----
                 // valid
                 // -----
 
                 bool valid () const {
-                    // <your code>
-                    return true;}
+                    return (deque_ptr -> b_a <= p && p >= deque_ptr->e_a);}
+
 
             public:
                 // -----------
@@ -375,9 +383,10 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-                const_iterator (/* <your arguments> */) {
-                    // <your code>
-                    assert(valid());}
+		const_iterator (Deque<value_type>* d_arg, pointer d_ptr){
+			deque_ptr = d_arg;
+			p = d_ptr;
+			assert(valid());}
 
                 // Default copy, destructor, and copy assignment.
                 // const_iterator (const const_iterator&);
@@ -392,10 +401,7 @@ class Deque {
                  * <your documentation>
                  */
                 reference operator * () const {
-                    // <your code>
-                    // dummy is just to be able to compile the skeleton, remove it
-                    static value_type dummy;
-                    return dummy;}
+                    return *p;}
 
                 // -----------
                 // operator ->
@@ -415,8 +421,14 @@ class Deque {
                  * <your documentation>
                  */
                 const_iterator& operator ++ () {
-                    // <your code>
-                    assert(valid());
+                    if(p!=e){
+			if((p+1)== deque_ptr->e_a ){
+			 //wrap around 
+			 p = deque_ptr->b_a;
+					}
+			 ++p;
+			}
+			assert(valid());
                     return *this;}
 
                 /**
@@ -436,7 +448,11 @@ class Deque {
                  * <your documentation>
                  */
                 const_iterator& operator -- () {
-                    // <your code>
+                    if(p == deque_ptr->b_a ){
+			//wrap around 
+			 p = (deque_ptr->e_a) - 1 ;
+			}
+			 --p;
                     assert(valid());
                     return *this;}
 
@@ -456,9 +472,13 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-                const_iterator& operator += (difference_type) {
-                    // <your code>
-                    assert(valid());
+                const_iterator& operator += (difference_type d) {
+                    difference_type a = d % (deque_ptr->d_size);
+                    while(a){
+		    ++(*this);
+		    --a;
+		      }
+		    assert(valid());
                     return *this;}
 
                 // ----------
@@ -478,8 +498,12 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-                const_iterator& operator -= (difference_type) {
-                    // <your code>
+                const_iterator& operator -= (difference_type d) {
+                    difference_type a = d % (deque_ptr->d_size);
+                    while(a){
+		    --(*this);
+		    --a;
+		      }
                     assert(valid());
                     return *this;}
 
@@ -511,13 +535,17 @@ class Deque {
          */
         explicit Deque (size_type s, const_reference v = value_type(), const allocator_type& a = allocator_type()) : a(a) {
             d_size = s;
-	    b_a = this->a.allocate(s+1);
+	    b_a = this->a.allocate( s+1 );
 	    e_a = b_a + s + 1;
+	    std::cout << (e_a - b_a) << std::endl;
+	    std::cout << "exited";
 	    uninitialized_fill(this->a, b_a, e_a, v);
+	    std::cout << "exited";
 	    b = b_a +  ( (e_a - b_a)  / 2);
-		e = b-1;
-		a.destroy(&*e);     //Destroy the last element that e points to (empty space) coz we need 
-							//the spot for the algorithm's to run on the iterator class
+	    e = b-1;
+	    this->a.destroy(&*e);   
+	    //Destroy the last element that e points to (empty space) coz we need 
+	//the spot for the algorithm's to run on the iterator class
         assert(valid());}
 
         /**
@@ -537,6 +565,7 @@ class Deque {
          */
         ~Deque () {
             destroy(this->a, this->begin(), this->end() );
+	    std::cout << "xxxited";
 	    a.deallocate(b_a, (e_a - b_a) );
             assert(valid());}
 
@@ -625,7 +654,7 @@ class Deque {
          */
         const_iterator begin () const {
             // <your code>
-            return const_iterator(/* <your arguments> */);}
+            return const_iterator(this, b);}
 
         // -----
         // clear
@@ -664,7 +693,7 @@ class Deque {
          */
         const_iterator end () const {
             // <your code>
-            return const_iterator(/* <your arguments> */);}
+            return const_iterator(this, e);}
 
         // -----
         // erase

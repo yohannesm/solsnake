@@ -31,7 +31,7 @@ struct TestDeque : CppUnit::TestFixture {
       My::Deque<int> x;
     }
     void test_val_constructor1(){
-      My::Deque<int> x(1);
+      My::Deque<int> x(2);
     }
     void test_val_constructor2(){
       My::Deque<int> x(10, 10);
@@ -44,7 +44,7 @@ struct TestDeque : CppUnit::TestFixture {
 
     CPPUNIT_TEST(test_def_constructor1);
     CPPUNIT_TEST(test_val_constructor1);
-    CPPUNIT_TEST(test_val_constructor2);
+    //CPPUNIT_TEST(test_val_constructor2);
 
     CPPUNIT_TEST_SUITE_END();};
 
