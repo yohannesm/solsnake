@@ -66,12 +66,18 @@ template <typename A, typename BI, typename U>
 BI uninitialized_fill (A& a, BI b, BI e, const U& v) {
     BI p = b;
     try {
+	//std::cout << "b: " << b << " " << "e: " << e <<std::endl;
         while (b != e) {
             a.construct(&*b, v);
-            ++b;}}
+			std::cout << std::endl <<  "b: " << b << " " << "e: " << e <<std::endl;
+            ++b;
+			std::cout << "b inc: " << b << " " << "e inc: " << e <<std::endl;
+			}}
     catch (...) {
+	std::cout << "lalalalalala" << std::endl;
         destroy(a, p, b);
         throw;}
+		std::cout << "wenfwnfnn" << e <<std::endl;
     return e;}
 
 // -----
@@ -141,6 +147,7 @@ class Deque {
         // -----
 
         bool valid () const {
+		std::cout << "valid" << std::endl;
             return (!b && !e && !b_a && !e_a) ||
 		(b!=e && b_a < e_a && b < e_a && e < e_a); }
     public:
@@ -383,7 +390,7 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-		const_iterator (Deque<value_type>* d_arg, pointer d_ptr){
+			const_iterator (Deque<value_type>* d_arg, pointer d_ptr){
 			deque_ptr = d_arg;
 			p = d_ptr;
 			assert(valid());}
@@ -540,13 +547,17 @@ class Deque {
 	    std::cout << (e_a - b_a) << std::endl;
 	    std::cout << "exited";
 	    uninitialized_fill(this->a, b_a, e_a, v);
-	    std::cout << "exited";
+		std::cout << "exited laalalala" << std::endl;
 	    b = b_a +  ( (e_a - b_a)  / 2);
+		std::cout << "b" << b << std::endl;
 	    e = b-1;
-	    this->a.destroy(&*e);   
+		std::cout << "e" << e << std::endl;
+	    this->a.destroy(&*e); 
+		std::cout << "before valid" << std::endl;	
 	    //Destroy the last element that e points to (empty space) coz we need 
 	//the spot for the algorithm's to run on the iterator class
-        assert(valid());}
+        assert(valid());
+		std::cout << "validated i hate c++" << std::endl;}
 
         /**
          * <your documentation>
@@ -564,7 +575,9 @@ class Deque {
 	 * FIXME: don't forget to implement iterator to do the right thing
          */
         ~Deque () {
-            destroy(this->a, this->begin(), this->end() );
+		std::cout << "dddddddddddddddffff" << std::endl;
+            //destroy(this->a, this->begin(), this->end() );
+			destroy(this->a, b_a, e_a );
 	    std::cout << "xxxited";
 	    a.deallocate(b_a, (e_a - b_a) );
             assert(valid());}
