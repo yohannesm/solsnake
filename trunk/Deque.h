@@ -169,6 +169,10 @@ class Deque {
                 friend bool operator == (const iterator& lhs, const iterator& rhs) {
                     // <your code>
                     return lhs.p == rhs.p;}
+				
+                friend bool operator != (const iterator& lhs, const iterator& rhs) {
+                    // <your code>
+                    return lhs.p != rhs.p;}				
 
             private:
                 // ----
@@ -358,6 +362,9 @@ class Deque {
                 friend bool operator == (const const_iterator& lhs, const const_iterator& rhs) {
                     return lhs.p == rhs.p;}
 
+                friend bool operator != (const const_iterator& lhs, const const_iterator& rhs) {
+                    return lhs.p != rhs.p;}
+					
             private:
                 // ----
                 // data
