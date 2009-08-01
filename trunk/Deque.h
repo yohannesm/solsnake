@@ -17,7 +17,7 @@
 #include <memory>    // allocator
 #include <stdexcept> // out_of_range
 #include <utility>   // !=, <=, >, >=
-
+#include <iostream> 
 // -----
 // using
 // -----
@@ -66,18 +66,13 @@ template <typename A, typename BI, typename U>
 BI uninitialized_fill (A& a, BI b, BI e, const U& v) {
     BI p = b;
     try {
-	//std::cout << "b: " << b << " " << "e: " << e <<std::endl;
         while (b != e) {
             a.construct(&*b, v);
-			std::cout << std::endl <<  "b: " << b << " " << "e: " << e <<std::endl;
             ++b;
-			std::cout << "b inc: " << b << " " << "e inc: " << e <<std::endl;
 			}}
     catch (...) {
-	std::cout << "lalalalalala" << std::endl;
         destroy(a, p, b);
         throw;}
-		std::cout << "wenfwnfnn" << e <<std::endl;
     return e;}
 
 // -----
@@ -111,7 +106,6 @@ class Deque {
          * <your documentation>
          */
         friend bool operator == (const Deque& lhs, const Deque& rhs) {
-            // <your code>
             // you must use std::equal()
             return std::equal(lhs.begin(), lhs.end(), rhs.begin());}
 
@@ -123,7 +117,6 @@ class Deque {
          * <your documentation>
          */
         friend bool operator < (const Deque& lhs, const Deque& rhs) {
-            // <your code>
             // you must use std::lexicographical_compare()
             return std::lexicographical_compare
 	           (lhs.begin(), lhs.end(), rhs.begin(), rhs.end());}
@@ -147,7 +140,6 @@ class Deque {
         // -----
 
         bool valid () const {
-		std::cout << "valid" << std::endl;
             return (!b && !e && !b_a && !e_a) ||
 		(b!=e && b_a < e_a && b < e_a && e < e_a); }
     public:
@@ -240,13 +232,15 @@ class Deque {
                  * <your documentation>
                  */
                 iterator& operator ++ () {
-                    if(p!=e){
-			if((p+1)== deque_ptr->e_a ){
+                    if(p != deque_ptr->e){
+			if((p + 1)== deque_ptr->e_a ){
 			 //wrap around 
 			 p = deque_ptr->b_a;
 					}
+			else{
 			 ++p;
 			}
+		}
 			assert(valid());
                     return *this;}
 
@@ -271,7 +265,7 @@ class Deque {
 			//wrap around 
 			 p = (deque_ptr->e_a) - 1 ;
 			}
-			 --p;
+			else  --p;
                     assert(valid());
                     return *this;}
 
@@ -362,8 +356,7 @@ class Deque {
                  * <your documentation>
                  */
                 friend bool operator == (const const_iterator& lhs, const const_iterator& rhs) {
-                    // <your code>
-                    return false;}
+                    return lhs.p == rhs.p;}
 
             private:
                 // ----
@@ -379,7 +372,7 @@ class Deque {
                 // -----
 
                 bool valid () const {
-                    return (deque_ptr -> b_a <= p && p >= deque_ptr->e_a);}
+                    return (p >= deque_ptr -> b_a  && p <= deque_ptr->e_a);}
 
 
             public:
@@ -390,10 +383,10 @@ class Deque {
                 /**
                  * <your documentation>
                  */
-			const_iterator (Deque<value_type>* d_arg, pointer d_ptr){
-			deque_ptr = d_arg;
-			p = d_ptr;
-			assert(valid());}
+		const_iterator (const Deque<value_type>* d_arg, const pointer d_ptr){
+		deque_ptr = d_arg;
+		p = d_ptr;
+		assert(valid());}
 
                 // Default copy, destructor, and copy assignment.
                 // const_iterator (const const_iterator&);
@@ -428,12 +421,12 @@ class Deque {
                  * <your documentation>
                  */
                 const_iterator& operator ++ () {
-                    if(p!=e){
-			if((p+1)== deque_ptr->e_a ){
+                    if(p!= deque_ptr-> e){
+			if( (p+1) == deque_ptr->e_a ){
 			 //wrap around 
 			 p = deque_ptr->b_a;
 					}
-			 ++p;
+			else  ++p;
 			}
 			assert(valid());
                     return *this;}
@@ -459,7 +452,7 @@ class Deque {
 			//wrap around 
 			 p = (deque_ptr->e_a) - 1 ;
 			}
-			 --p;
+			else  --p;
                     assert(valid());
                     return *this;}
 
@@ -544,27 +537,24 @@ class Deque {
             d_size = s;
 	    b_a = this->a.allocate( s+1 );
 	    e_a = b_a + s + 1;
-	    std::cout << (e_a - b_a) << std::endl;
-	    std::cout << "exited";
 	    uninitialized_fill(this->a, b_a, e_a, v);
-		std::cout << "exited laalalala" << std::endl;
 	    b = b_a +  ( (e_a - b_a)  / 2);
-		std::cout << "b" << b << std::endl;
 	    e = b-1;
-		std::cout << "e" << e << std::endl;
-	    this->a.destroy(&*e); 
-		std::cout << "before valid" << std::endl;	
-	    //Destroy the last element that e points to (empty space) coz we need 
-	//the spot for the algorithm's to run on the iterator class
+	    //this->a.destroy(&*e); 
         assert(valid());
-		std::cout << "validated i hate c++" << std::endl;}
+		}
 
         /**
          * <your documentation>
          */
-        Deque (const Deque& that) {
-            // <your code>
-            assert(valid());}
+        Deque (const Deque& that) : a(that.a) {
+            d_size = that.d_size;
+	    b_a = this->a.allocate( d_size + 1);
+	    e_a = b_a + d_size + 1;
+	    uninitialized_copy(a, that.b_a, that.e_a, b_a);
+	    b = b_a +  ( (e_a - b_a)  / 2);
+	    e = b-1;
+	    assert(valid());}
 
         // ----------
         // destructor
@@ -575,10 +565,7 @@ class Deque {
 	 * FIXME: don't forget to implement iterator to do the right thing
          */
         ~Deque () {
-		std::cout << "dddddddddddddddffff" << std::endl;
-            //destroy(this->a, this->begin(), this->end() );
-			destroy(this->a, b_a, e_a );
-	    std::cout << "xxxited";
+	    destroy(this->a, b_a, e_a );
 	    a.deallocate(b_a, (e_a - b_a) );
             assert(valid());}
 
@@ -602,10 +589,21 @@ class Deque {
          * <your documentation>
          */
         reference operator [] (size_type index) {
-            // <your code>
-            // dummy is just to be able to compile the skeleton, remove it
-            static value_type dummy;
-            return dummy;}
+	    pointer b_copy = b;
+	    size_type b2e_a = e_a - b;
+	    if(index < b2e_a){
+	    	b_copy += index;
+	    	reference result = *b_copy;
+		return result;
+	    	}
+	    else{ //index >= b2e_a
+	    index -= b2e_a;
+	    b_copy = b_a;
+	    b_copy += index;
+	    reference result = *b_copy;
+	    return result;
+	     }
+	    }
 
         /**
          * <your documentation>
@@ -621,10 +619,25 @@ class Deque {
          * <your documentation>
          */
         reference at (size_type index) {
-            // <your code>
-            // dummy is just to be able to compile the skeleton, remove it
-            static value_type dummy;
-            return dummy;}
+	    if(index < 0 || index >= d_size){
+	    	throw std::out_of_range("My::Deque.at(i) invalid index");
+	    }
+	    pointer b_copy = b;
+	    size_type b2e_a = e_a - b;
+	    if(index < b2e_a){
+	    	b_copy += index;
+	    	reference result = *b_copy;
+		return result;
+	    	}
+	    else{ //index >= b2e_a
+	    index -= b2e_a;
+	    b_copy = b_a;
+	    b_copy += index;
+	    reference result = *b_copy;
+	    return result;
+	     }
+	    }
+	    
 
         /**
          * <your documentation>
@@ -640,11 +653,18 @@ class Deque {
          * <your documentation>
          */
         reference back () {
-            // <your code>
-            // dummy is just to be able to compile the skeleton, remove it
-            static value_type dummy;
-            return dummy;}
-
+	    pointer back = e;
+            if( b_a == back){
+	        back = e_a - 1;
+	        reference result = *back;
+		return result;
+	    }
+	    else{
+	    --back;
+	    reference result = *back;
+	    return result;
+	    }
+	  }
         /**
          * <your documentation>
          */
@@ -677,7 +697,7 @@ class Deque {
          * <your documentation>
          */
         void clear () {
-            // <your code>
+            resize(0);
             assert(valid());}
 
         // -----
@@ -728,10 +748,7 @@ class Deque {
          * <your documentation>
          */
         reference front () {
-            // <your code>
-            // dummy is just to be able to compile the skeleton, remove it
-            static value_type dummy;
-            return dummy;}
+            return *b;}
 
         /**
          * <your documentation>
@@ -815,9 +832,19 @@ class Deque {
 
         /**
          * <your documentation>
+	 * FIXME: need to put the case where the allocator is different
+	 * that will need to have the assignment operator defined
          */
-        void swap (Deque&) {
-            // <your code>
+        void swap (Deque& that) {
+            if(a == that.a){
+	    std::swap(b_a, that.b_a);
+	    std::swap(e_a, that.e_a);
+	    std::swap(b, that.b);
+	    std::swap(e, that.e);
+	    size_type temp = d_size;
+	    d_size = that.d_size;
+	    that.d_size = temp;
+	    }
             assert(valid());}};
 
 } // My
