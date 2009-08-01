@@ -125,7 +125,8 @@ class Deque {
         // ----
         // data
         // ----
-
+	friend class iterator;
+	friend class const_iterator;
         allocator_type a;
 	
 	pointer b_a; // beginning of the real heap array
@@ -167,13 +168,13 @@ class Deque {
                  * <your documentation>
                  */
                 friend bool operator == (const iterator& lhs, const iterator& rhs) {
-                    // <your code>
-                    return lhs.p == rhs.p;}
+                    return lhs.deque_ptr == rhs.deque_ptr && lhs.p == rhs.p;}
 				
                 friend bool operator != (const iterator& lhs, const iterator& rhs) {
-                    // <your code>
-                    return lhs.p != rhs.p;}				
-
+                    //return lhs.deque_ptr != rhs.deque_ptr && lhs.p != rhs.p;}				 
+		    return !(lhs==rhs);
+		    }
+			
             private:
                 // ----
                 // data
@@ -360,10 +361,10 @@ class Deque {
                  * <your documentation>
                  */
                 friend bool operator == (const const_iterator& lhs, const const_iterator& rhs) {
-                    return lhs.p == rhs.p;}
+                    return lhs.deque_ptr == rhs.deque_ptr && lhs.p == rhs.p;}
 
                 friend bool operator != (const const_iterator& lhs, const const_iterator& rhs) {
-                    return lhs.p != rhs.p;}
+                    return !(lhs==rhs);}
 					
             private:
                 // ----
@@ -558,9 +559,9 @@ class Deque {
             d_size = that.d_size;
 	    b_a = this->a.allocate( d_size + 1);
 	    e_a = b_a + d_size + 1;
-	    uninitialized_copy(a, that.b_a, that.e_a, b_a);
 	    b = b_a +  ( (e_a - b_a)  / 2);
 	    e = b-1;
+	    uninitialized_copy(a, that.begin(), that.end(), begin());
 	    assert(valid());}
 
         // ----------
@@ -571,7 +572,8 @@ class Deque {
          * <your documentation>
          */
         ~Deque () {
-	    destroy(this->a, b_a, e_a );
+	    //destroy(this->a, b_a, e_a );
+	    destroy(this->a, this->begin(), this->end() );
 	    a.deallocate(b_a, (e_a - b_a) );
             assert(valid());}
 
@@ -586,6 +588,21 @@ class Deque {
             if(this == &rhs) return *this;
 	    if(rhs.size() == size())
 	    	std::copy(rhs.begin(), rhs.end(), this->begin());
+            else if(rhs.size() < size()){
+	        std::copy(rhs.begin(), rhs.end(), begin());
+		//resize(rhs.size());
+		d_size = rhs.size();
+	    }
+	    else if(rhs.size() <= capacity()){
+	        std::copy(rhs.begin(), rhs.end(), begin());
+		end() = uninitialized_copy(a, rhs.begin() + size(), 
+					rhs.end(), end());
+	    }
+	    else{
+	       clear();
+	       Deque x(rhs, rhs.capacity());
+	       swap(x);
+	    }
 	    assert(valid());
             return *this;}
 
@@ -813,15 +830,69 @@ class Deque {
             assert(valid());}
 
         // ------
+        // capacity
+        // ------
+	private:
+	size_type capacity() const {
+	    return (e_a - b_a);
+	}
+
+	Deque (const Deque& that, size_type c) : a(that.a) {
+	    b_a = this->a.allocate( c + 1);
+	    e_a = b_a + c + 1;
+	    b = b_a +  ( (e_a - b_a)  / 2);
+	    //Deque::const_iterator cit = begin() + that.size();
+	    //e = cit.p;
+	    size_type diff = e_a - b;
+	    if(diff > that.size()){
+	    //e = uninitialized_copy(a, that.begin(), that.end(), begin());
+	    }
+	    else{
+	    //e = uinitialized_copy(a, that.begin(), that.end(), begin());
+	    }
+	    d_size = that.size();    
+	}
+	public:
+        // ------
         // resize
         // ------
-
+         
+        /* const_iterator it(this, b);
+	std::cout << "STAR IT = " << *it << std::endl;
+	pointer qwe = const_cast<pointer&>(it.p);
+	std::cout << qwe;
+	assert(it.deque_ptr == this);*/
         /**
          * <your documentation>
          */
         void resize (size_type s, const_reference v = value_type()) {
-            // <your code>
-            assert(valid());}
+            if (s == d_size) return;
+	    if (s < size() ){
+	        d_size = s;
+	        //e = destroy(a, this->begin + s, this->end());
+		}
+	    else if(s < capacity() ){
+	    //we can fill the spot between b and e
+	      d_size = s;
+	      //if(b > e && ( (b-e) > (s-size()) )){
+	      //e = uninitialized_fill(a, e, e + s, v);
+	      }
+	      //else if(e > b && ( (e-b) > (s-size()) )){
+	      //e = uninitialized_fill(a, this->end(), this->end() + s, v);
+	      }
+	    }
+	    else{
+	    //create a new deque
+	    //populate with the new values
+	    //destroy the old deque
+	    d_size = s;
+	    s = std::max(2*size(), s);
+            Deque temp(*this, s);
+	    this->swap(temp);
+	    //e = uninitialized_fill(a, e, begin() + s, v);
+	    }
+	    
+	    assert(valid());}
 
         // ----
         // size
@@ -852,6 +923,11 @@ class Deque {
 	    size_type temp = d_size;
 	    d_size = that.d_size;
 	    that.d_size = temp;
+	    }
+	    else{
+	    Deque temp(*this);
+	    *this = that;
+	    that = temp;
 	    }
             assert(valid());}};
 

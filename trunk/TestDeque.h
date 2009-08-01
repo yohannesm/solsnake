@@ -44,7 +44,7 @@ struct TestDeque : CppUnit::TestFixture {
     void test_assignment1(){
       My::Deque<int> x(5, 6);
       My::Deque<int> y(5); 
-      //y = x;
+      y = x;
       }
     void test_iterator1(){
       My::Deque<int> x(5, 3);
@@ -77,6 +77,12 @@ struct TestDeque : CppUnit::TestFixture {
      a[5] = 5;
      CPPUNIT_ASSERT(a.back() == 5);
      }
+     void test_resize1(){
+     using namespace My;
+     Deque<int> a(5, 1);
+     a[0] = 10;
+     a.resize(15);
+     }
     // -----
     // suite
     // -----
@@ -92,6 +98,7 @@ struct TestDeque : CppUnit::TestFixture {
     CPPUNIT_TEST(test_c_iterator1);
     CPPUNIT_TEST(test_subscript1);
     CPPUNIT_TEST(test_back1);
+    CPPUNIT_TEST(test_resize1);
     
     CPPUNIT_TEST_SUITE_END();};
 
