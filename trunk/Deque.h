@@ -562,7 +562,6 @@ class Deque {
 
         /**
          * <your documentation>
-	 * FIXME: don't forget to implement iterator to do the right thing
          */
         ~Deque () {
 	    destroy(this->a, b_a, e_a );
@@ -577,8 +576,10 @@ class Deque {
          * <your documentation>
          */
         Deque& operator = (const Deque& rhs) {
-            // <your code>
-            assert(valid());
+            if(this == &rhs) return *this;
+	    if(rhs.size() == size())
+	    	std::copy(rhs.begin(), rhs.end(), this->begin());
+	    assert(valid());
             return *this;}
 
         // -----------

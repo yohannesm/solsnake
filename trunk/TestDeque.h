@@ -41,6 +41,11 @@ struct TestDeque : CppUnit::TestFixture {
       My::Deque<int> y(x); 
      // CPPUNIT_ASSERT(y == x);
     }
+    void test_assignment1(){
+      My::Deque<int> x(5, 6);
+      My::Deque<int> y(5); 
+      //y = x;
+      }
     void test_iterator1(){
       My::Deque<int> x(5, 3);
       My::Deque<int>::iterator it = x.begin();
@@ -82,6 +87,7 @@ struct TestDeque : CppUnit::TestFixture {
     CPPUNIT_TEST(test_val_constructor1);
     CPPUNIT_TEST(test_val_constructor2);
     CPPUNIT_TEST(test_copy_constructor1);
+    //CPPUNIT_TEST(test_assignment1);
     CPPUNIT_TEST(test_iterator1);
     CPPUNIT_TEST(test_c_iterator1);
     CPPUNIT_TEST(test_subscript1);
