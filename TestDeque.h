@@ -39,7 +39,7 @@ struct TestDeque : CppUnit::TestFixture {
     void test_copy_constructor1(){
       My::Deque<int> x(5, 6);
       My::Deque<int> y(x); 
-     // CPPUNIT_ASSERT(y == x);
+      CPPUNIT_ASSERT(y == x);
     }
     void test_assignment1(){
       My::Deque<int> x(5, 6);
