@@ -5,7 +5,7 @@
 // ---------------------------
 
 // To run the program:
-//     g++ -ansi -pedantic -lcppunit -ldl -Wall -DTEST main.c++ -o main.app
+//     clear && g++ -ansi -pedantic -lcppunit -ldl -Wall -DTEST main.c++ -o main.app && main.app
 //     valgrind main.app
 
 // To configure Doxygen:
