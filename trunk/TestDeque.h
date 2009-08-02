@@ -51,15 +51,20 @@ struct TestDeque : CppUnit::TestFixture {
       My::Deque<int> y(12, 7);
       My::Deque<int>::iterator ity = y.begin();
       y.resize(8);
-      while(ity != y.end()){
-      	std::cout << *ity << std::endl;
-	++ity;
-      }
-      std::cout << y.size();
       y = x;
       ity = y.begin();
       while(ity != y.end()){
-      	std::cout << *ity << std::endl;
+	++ity;
+      }
+      CPPUNIT_ASSERT(y == x);
+      }
+    void test_assignment3(){
+      My::Deque<int> x(20, 6);
+      My::Deque<int> y(12, 7);
+      My::Deque<int>::iterator ity = y.begin();
+      y = x;
+      ity = y.begin();
+      while(ity != y.end()){
 	++ity;
       }
       CPPUNIT_ASSERT(y == x);
@@ -103,6 +108,12 @@ struct TestDeque : CppUnit::TestFixture {
      a.resize(100);
      CPPUNIT_ASSERT(a.size() == 100);
      }
+     void test_clear1(){
+     using namespace My;
+     Deque<int> a(15, 1);
+     a.clear();
+     CPPUNIT_ASSERT(a.size() == 0);
+     }
     // -----
     // suite
     // -----
@@ -115,11 +126,13 @@ struct TestDeque : CppUnit::TestFixture {
     CPPUNIT_TEST(test_copy_constructor1);
     CPPUNIT_TEST(test_assignment1);
     CPPUNIT_TEST(test_assignment2);
+    CPPUNIT_TEST(test_assignment3);
     CPPUNIT_TEST(test_iterator1);
     CPPUNIT_TEST(test_c_iterator1);
     CPPUNIT_TEST(test_subscript1);
     CPPUNIT_TEST(test_back1);
     CPPUNIT_TEST(test_resize1);
+    CPPUNIT_TEST(test_clear1);
     
     CPPUNIT_TEST_SUITE_END();};
 
