@@ -130,17 +130,13 @@ struct TestDeque : CppUnit::TestFixture {
 	Deque<int>::iterator it = a.begin();
 		a[0]=10;
 	while( it != a.end() ){
-	//std::cout << *it << " ";
 	++it;
 	}
 	a.pop_front();
 	it = a.begin();
-	//std::cout << std::endl;
 	while( it != a.end() ){
-	//std::cout << *it << " ";
 	++it;
 	}
-	//std::cout << a.size() << std::endl;	
     }
 	
      void test_push_back1(){
@@ -158,15 +154,42 @@ struct TestDeque : CppUnit::TestFixture {
      	using namespace My;
      	Deque<int> a(5,1);
      	a.push_front(17);
-		//a.push_front(17);
-		std::cout << a.size() << std::endl;	
-		//a.clear();
+     	a.push_front(16);
+     	a.push_front(15);
+     	a.push_front(14);
+     	a.push_front(13);
+     	a.push_front(12);
 	Deque<int>::iterator it = a.begin();
 	while( it != a.end() ){
-	std::cout << *it << std::endl;	
 	++it;
 	}
-     }	 
+     }
+     void test_insert1(){
+     	using namespace My;
+     	Deque<int> a(10,2);
+	Deque<int>::iterator it = a.begin();
+	it += 3;
+	a.insert(it, 9);
+	it = a.end() - 1;
+	a.insert(it, 100);
+	it = a.begin();
+	while( it != a.end() ){
+	++it;
+	}
+     }
+     void test_erase1(){
+     	using namespace My;
+     	Deque<int> a(7,3);
+	Deque<int>::iterator it = a.begin();
+	a[3] = 100;
+	std::cout << std::endl;
+	it += 3;
+	a.erase(it);
+	it = a.begin();
+	while( it != a.end() ){
+	++it;
+	}
+    }
     //std::cout << *it << std::endl;
     // -----
     // suite
@@ -191,6 +214,8 @@ struct TestDeque : CppUnit::TestFixture {
     CPPUNIT_TEST(test_pop_front1);
     CPPUNIT_TEST(test_push_back1);
     CPPUNIT_TEST(test_push_front1);
+    CPPUNIT_TEST(test_insert1);
+    CPPUNIT_TEST(test_erase1);
     
     CPPUNIT_TEST_SUITE_END();};
 
