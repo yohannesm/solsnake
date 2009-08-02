@@ -142,7 +142,7 @@ class Deque {
 
 	bool valid () const {
 	    return (!b && !e && !b_a && !e_a) ||
-		(b!=e && b_a < e_a && b < e_a && e < e_a); }
+		(b!=e &&  b_a < e_a && b < e_a && e < e_a); }
     public:
 	// --------
 	// iterator
@@ -590,28 +590,22 @@ Deque (const Deque& that) : a(that.a) {
 		std::copy(rhs.begin(), rhs.end(), this->begin());
 	    else if(rhs.size() < size()){
 		std::copy(rhs.begin(), rhs.end(), begin());
-		//resize(rhs.size());
+		resize(rhs.size());
 		d_size = rhs.size();
 	    }
 	    else if(rhs.size() <= capacity()){
-	    std::cout << "IT GOES HEREEEEEEEEEEE!!!" << std::endl;
-	    std::cout << "e = " << e << std::endl;
 		iterator it = this->end();
-		std::cout << "it.p = " << it.p << std::endl;
 		const_iterator rhs_it = rhs.begin();
 		rhs_it += size();
 		std::copy(rhs.begin(), rhs_it, begin());
 		it = uninitialized_copy(a, rhs_it, 
 			rhs.end(), end());
-		std::cout << "it = " << it.p << std::endl;
 		e = it.p;
-	    std::cout << "e = " << e << std::endl;
 		d_size = rhs.size();
 	    }
 	    else{
-		clear();
 		Deque x(rhs, rhs.capacity());
-		swap(x);
+		this->swap(x);
 	    }
 	    assert(valid());
 	    return *this;}
@@ -872,11 +866,21 @@ const_reference operator [] (size_type index) const {
          */
         void resize (size_type s, const_reference v = value_type()) {
             iterator it(this, b);
+	    if(s == 0){
+		it = destroy(a, it, this->end());
+		b = e = b_a = e_a = 0;
+		d_size = s;
+	    }
 	    if (s == d_size) return;
 	    if (s < size() ){
 	        it += s;
 		it = destroy(a, it, this->end());
-		e = it.p;
+		/*if(s == 0){
+			b = e = b_a = e_a = 0;
+			}
+		else{
+			e = it.p;
+			}*/
 		d_size = s;
 		}
 	    else if(s < capacity() ){
@@ -894,9 +898,8 @@ const_reference operator [] (size_type index) const {
 	    e = it.p;
 	    d_size = s;
 	    }
-	    
-	    
-	    assert(valid());}
+	    assert(valid());
+	    }
 
         // ----
         // size
