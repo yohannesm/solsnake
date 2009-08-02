@@ -805,7 +805,8 @@ const_reference operator [] (size_type index) const {
          * <your documentation>
          */
         void pop_back () {
-            // <your code>
+            assert(!empty());
+	    resize(d_size - 1);
             assert(valid());}
 
         /**
@@ -822,8 +823,8 @@ const_reference operator [] (size_type index) const {
         /**
          * <your documentation>
          */
-        void push_back (const_reference) {
-            // <your code>
+        void push_back (const_reference v) {
+            resize(size() + 1, v);
             assert(valid());}
 
         /**
@@ -881,6 +882,7 @@ const_reference operator [] (size_type index) const {
 		else{
 			e = it.p;
 			}*/
+		e = it.p;
 		d_size = s;
 		}
 	    else if(s < capacity() ){
@@ -890,13 +892,17 @@ const_reference operator [] (size_type index) const {
 		d_size = s;
 	    }
 	    else{
+	    size_type st = s;
 	    s = std::max(2*size(), s);
 	    Deque temp(*this, s);
 	    this->swap(temp);
 	    it.p = e;
-	    it = uninitialized_fill(a, it, it + s, v);
+	    //we need to fill the rest of the spot, that we 
+	    // haven't filled in and that spot is size of dif
+	    size_type dif = st - d_size;
+	    it = uninitialized_fill(a, it, it + dif, v);
 	    e = it.p;
-	    d_size = s;
+	    d_size = st;
 	    }
 	    assert(valid());
 	    }

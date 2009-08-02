@@ -114,6 +114,26 @@ struct TestDeque : CppUnit::TestFixture {
      a.clear();
      CPPUNIT_ASSERT(a.size() == 0);
      }
+     void test_pop_back1(){
+     	using namespace My;
+     	Deque<int> a(5, 1);
+     	a.pop_back();
+	Deque<int>::iterator it = a.begin();
+	while( it != a.end() ){
+	++it;
+	}
+     }
+     void test_push_back1(){
+     	using namespace My;
+     	Deque<int> a(5, 1);
+     	a.push_back(17);
+     	a.push_back(17);
+	Deque<int>::iterator it = a.begin();
+	while( it != a.end() ){
+	++it;
+	}
+     }
+    //std::cout << *it << std::endl;
     // -----
     // suite
     // -----
@@ -133,6 +153,8 @@ struct TestDeque : CppUnit::TestFixture {
     CPPUNIT_TEST(test_back1);
     CPPUNIT_TEST(test_resize1);
     CPPUNIT_TEST(test_clear1);
+    CPPUNIT_TEST(test_pop_back1);
+    CPPUNIT_TEST(test_push_back1);
     
     CPPUNIT_TEST_SUITE_END();};
 
