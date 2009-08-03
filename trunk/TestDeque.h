@@ -14,6 +14,7 @@
 #include <algorithm> // equal
 #include <stdexcept> // out_of_range
 #include <deque>
+#include <string>
 
 #include "cppunit/TestFixture.h"             // TestFixture
 #include "cppunit/extensions/HelperMacros.h" // CPPUNIT_TEST, CPPUNIT_TEST_SUITE, CPPUNIT_TEST_SUITE
@@ -380,7 +381,384 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	CPPUNIT_ASSERT(*(a.end()-1)!=1000);
     }
+    
 
+
+
+
+
+
+    void test_deque_default_constructor1 () {
+		using namespace My;
+		Deque<int> a;
+	}
+	void test_deque_default_constructor2 () {
+		using namespace My;
+		Deque<std::string> a;
+	}
+	void test_deque_constructor1 () {
+		using namespace My;
+		Deque<int> a(9);
+		Deque<int> b(10);
+		Deque<int> c(9, 9);
+		Deque<int> d(10, 10);
+	}
+	void test_deque_constructor2 () {
+		using namespace My;
+		Deque<std::string> a(9);
+		Deque<std::string> b(10);
+		Deque<std::string> c(9, "abc");
+		Deque<std::string> d(10, "wxyz");
+	}
+	void test_deque_copy_constructor1 () {
+		using namespace My;
+		Deque<int> a(9);
+		Deque<int> b(a);
+		Deque<int> c(9, 9);
+		Deque<int> d(c);
+		Deque<int> e(10);
+		Deque<int> f(e);
+		Deque<int> g(10, 10);
+		Deque<int> h(g);
+	}
+	void test_deque_copy_constructor2 () {
+		using namespace My;
+		Deque<std::string> a(9);
+		Deque<std::string> b(a);
+		Deque<std::string> c(9, "abc");
+		Deque<std::string> d(c);
+		Deque<std::string> e(10);
+		Deque<std::string> f(e);
+		Deque<std::string> g(10, "wxyz");
+		Deque<std::string> h(g);
+	}
+	
+	// ----------
+	// assignment
+	// ----------
+	
+	void test_deque_assignment1 () {
+		using namespace My;
+		Deque<int> a(3, 123);
+		Deque<int> b = a;
+		CPPUNIT_ASSERT(a == b);
+	}
+	void test_deque_assignment2 () {
+		using namespace My;
+	}
+	
+	// ---------
+	// subscript
+	// ---------
+	
+	void test_deque_subscript1 () {
+		using namespace My;
+		Deque<int> a(9);
+		CPPUNIT_ASSERT(a[0] == 0);
+		CPPUNIT_ASSERT(a[8] == 0);
+		Deque<int> b(10);
+		CPPUNIT_ASSERT(b[0] == 0);
+		CPPUNIT_ASSERT(b[9] == 0);
+		Deque<int> c(9, 9);
+		CPPUNIT_ASSERT(c[0] == 9);
+		CPPUNIT_ASSERT(c[8] == 9);
+		Deque<int> d(10, 10);
+		CPPUNIT_ASSERT(d[0] == 10);
+		CPPUNIT_ASSERT(d[9] == 10);
+	}
+	void test_deque_subscript2 () {
+		using namespace My;
+		Deque<std::string> a(9);
+		CPPUNIT_ASSERT(a[0] == "");
+		CPPUNIT_ASSERT(a[8] == "");
+		Deque<std::string> b(10);
+		CPPUNIT_ASSERT(b[0] == "");
+		CPPUNIT_ASSERT(b[9] == "");
+		Deque<std::string> c(9, "abc");
+		CPPUNIT_ASSERT(c[0] == "abc");
+		CPPUNIT_ASSERT(c[8] == "abc");
+		Deque<std::string> d(10, "wxyz");
+		CPPUNIT_ASSERT(d[0] == "wxyz");
+		CPPUNIT_ASSERT(d[9] == "wxyz");
+	}
+	
+	// ----
+	// back
+	// ----
+	
+	void test_deque_back1 () {
+		using namespace My;
+		Deque<int> a(9);
+		CPPUNIT_ASSERT(a.back() == 0);
+		Deque<int> b(a);
+		CPPUNIT_ASSERT(b.back() == 0);
+		Deque<int> c(9, 123);
+		CPPUNIT_ASSERT(c.back() == 123);
+		Deque<int> d(c);
+		CPPUNIT_ASSERT(d.back() == 123);
+		Deque<int> e(10, 456);
+		CPPUNIT_ASSERT(e.back() == 456);
+		Deque<int> f(e);
+		CPPUNIT_ASSERT(f.back() == 456);
+	}
+	
+	void test_deque_back2 () {
+		using namespace My;
+		Deque<std::string> a(9);
+		CPPUNIT_ASSERT(a.back() == "");
+		Deque<std::string> b(a);
+		CPPUNIT_ASSERT(b.back() == "");
+		Deque<std::string> c(9, "abc");
+		CPPUNIT_ASSERT(c.back() == "abc");
+		Deque<std::string> d(c);
+		CPPUNIT_ASSERT(d.back() == "abc");
+		Deque<std::string> e(10, "xyz");
+		CPPUNIT_ASSERT(e.back() == "xyz");
+		Deque<std::string> f(e);
+		CPPUNIT_ASSERT(f.back() == "xyz");
+	}
+	
+	// --------
+	// iterator
+	// --------
+	void test_deque_iterator1 () {
+		using namespace My;
+		Deque<int> a(9,123);
+		CPPUNIT_ASSERT(*(a.begin()) == 123);
+		CPPUNIT_ASSERT(*(a.end()-1) == 123);
+	}
+	void test_deque_iterator2 () {
+		using namespace My;
+		Deque<int> a(9,123);
+		CPPUNIT_ASSERT(*(a.begin()) == 123);
+	}
+	
+	// ----
+	// size
+	// ----
+	
+	void test_deque_size1 () {
+		using namespace My;
+		Deque<int> a;
+		CPPUNIT_ASSERT(a.size() == 0);
+		Deque<int> b(a);
+		CPPUNIT_ASSERT(b.size() == 0);
+		Deque<int> c(9);
+		CPPUNIT_ASSERT(c.size() == 9);
+		Deque<int> d(c);
+		CPPUNIT_ASSERT(d.size() == 9);
+		Deque<int> e(10, 10);
+		CPPUNIT_ASSERT(e.size() == 10);
+		Deque<int> f(e);
+		CPPUNIT_ASSERT(f.size() == 10);
+	}
+	void test_deque_size2 () {
+		using namespace My;
+		Deque<std::string> a;
+		CPPUNIT_ASSERT(a.size() == 0);
+		Deque<std::string> b(a);
+		CPPUNIT_ASSERT(b.size() == 0);
+		Deque<std::string> c(9);
+		CPPUNIT_ASSERT(c.size() == 9);
+		Deque<std::string> d(c);
+		CPPUNIT_ASSERT(d.size() == 9);
+		Deque<std::string> e(10, "abc");
+		CPPUNIT_ASSERT(e.size() == 10);
+		Deque<std::string> f(e);
+		CPPUNIT_ASSERT(f.size() == 10);
+	}
+	
+	// -----
+	// empty
+	// -----
+	
+	void test_deque_empty1 () {
+		using namespace My;
+		Deque<int> a;
+		CPPUNIT_ASSERT(a.empty());
+		Deque<int> b(a);
+		CPPUNIT_ASSERT(b.empty());
+		Deque<int> c(9);
+		CPPUNIT_ASSERT(!c.empty());
+		Deque<int> d(c);
+		CPPUNIT_ASSERT(!d.empty());
+		Deque<int> e(10, 10);
+		CPPUNIT_ASSERT(!e.empty());
+		Deque<int> f(e);
+		CPPUNIT_ASSERT(!f.empty());
+	}
+	
+	void test_deque_empty2 () {
+		using namespace My;
+		Deque<std::string> a;
+		CPPUNIT_ASSERT(a.empty());
+		Deque<std::string> b(a);
+		CPPUNIT_ASSERT(b.empty());
+		Deque<std::string> c(9);
+		CPPUNIT_ASSERT(!c.empty());
+		Deque<std::string> d(c);
+		CPPUNIT_ASSERT(!d.empty());
+		Deque<std::string> e(10, "abc");
+		CPPUNIT_ASSERT(!e.empty());
+		Deque<std::string> f(e);
+		CPPUNIT_ASSERT(!f.empty());
+	}
+	
+	// ----
+	// swap
+	// ----
+	
+	void test_deque_swap1 () {
+		using namespace My;
+		Deque<int> a(3, 123);
+		Deque<int> b(5, 456);
+		a.swap(b);
+		CPPUNIT_ASSERT(*(a.begin()) == 456);
+		CPPUNIT_ASSERT(*(b.begin()) == 123);
+	}
+	
+	// ------
+	// equals
+	// ------
+	
+	void test_deque_equal1 () {
+		using namespace My;
+		const Deque<int> a(3, 123);
+		const Deque<int> b(3, 123);
+		const Deque<int> c(3, 456);
+		
+		CPPUNIT_ASSERT(a == b);
+		CPPUNIT_ASSERT(!(a == c));
+		CPPUNIT_ASSERT(!(b == c));
+	}
+
+	// ------
+	// resize
+	// ------
+
+	void test_deque_resize1 () {
+		using namespace My;
+		Deque<int> a(10,222);
+		a.resize(5);
+		CPPUNIT_ASSERT(a.size() == 5);
+		Deque<int> b(10,222);
+		b.resize(20);
+		CPPUNIT_ASSERT(b.size() == 20);
+	}
+
+	void test_deque_resize2 () {
+		using namespace My;
+		Deque<std::string> a(10,"abc");
+		a.resize(5);
+		CPPUNIT_ASSERT(a.size() == 5);
+		Deque<std::string> b(10,"abc");
+		b.resize(20);
+		CPPUNIT_ASSERT(b.size() == 20);
+	}
+
+	// ------
+	// insert
+	// ------
+	void test_deque_insert1 () {
+		using namespace My;
+		Deque<int> a(3,123);
+		a.insert(a.begin()+1, 456);
+		a.insert(a.begin(), 789);
+		a.insert(a.end() - 1, 555);
+		CPPUNIT_ASSERT(a.size() == 6);
+	}
+
+	void test_deque_insert2 () {
+		using namespace My;
+		Deque<int> a(10,1);
+		Deque<int>::iterator it = a.begin();
+		it += 1;
+		a.insert(it, 34);
+	        CPPUNIT_ASSERT(a.size() == 11);
+	}
+
+	// -----
+	// erase
+	// -----
+
+	void test_deque_erase1 () {
+		using namespace My;
+		Deque<int> a(3,123);
+		a.erase(a.begin()+1);
+		CPPUNIT_ASSERT(a.size() == 2);
+		Deque<int> b(4,456);
+		b.erase(b.begin());
+		CPPUNIT_ASSERT(b.size() == 3);
+	}
+
+	void test_deque_erase2 () {
+		using namespace My;
+		Deque<std::string> a(3,"abc");
+		a.erase(a.begin()+1);
+		CPPUNIT_ASSERT(a.size() == 2);
+		Deque<std::string> b(4,"xyz");
+		b.erase(b.begin());
+		CPPUNIT_ASSERT(b.size() == 3);
+	}
+
+	// --------
+	// pop_back
+	// --------
+
+	void test_deque_pop_back1 () {
+		using namespace My;
+		Deque<int> a(3,123);
+		a.pop_back();
+		CPPUNIT_ASSERT(a.size() == 2);
+	}
+	void test_deque_pop_back2 () {
+		using namespace My;
+		Deque<std::string> a(3,"abc");
+		a.pop_back();
+		CPPUNIT_ASSERT(a.size() == 2);
+	}
+
+	// ---------
+	// pop_front
+	// ---------
+
+	void test_deque_pop_front1 () {
+		using namespace My;
+		Deque<int> a(3,123);
+		a.pop_front();
+		CPPUNIT_ASSERT(a.size() == 2);
+	}
+
+	void test_deque_pop_front2 () {
+		using namespace My;
+		Deque<std::string> a(3,"abc");
+		a.pop_front();
+		CPPUNIT_ASSERT(a.size() == 2);
+	}
+
+	// ----------
+	// push_front
+	// ----------
+	
+	void test_deque_push_front1 () {
+		using namespace My;
+		Deque<int> a(3,123);
+		a.push_front(456);
+		CPPUNIT_ASSERT(a.size() == 4);
+		CPPUNIT_ASSERT(a.at(0) == 456);
+	}
+	
+	// ----------
+	// push_back
+	// ----------
+	
+	void test_deque_push_back1 () {
+		using namespace My;
+		Deque<int> a(3,123);
+		a.push_back(456);
+		CPPUNIT_ASSERT(a.size() == 4);
+		CPPUNIT_ASSERT(a.at(3) == 456);
+	}	
     // -----
     // suite
     // -----
@@ -424,6 +802,42 @@ struct TestDeque : CppUnit::TestFixture {
     CPPUNIT_TEST(test_insert3);
     CPPUNIT_TEST(test_erase1);
     CPPUNIT_TEST(test_erase2);
+
+
+    CPPUNIT_TEST(test_deque_default_constructor1);
+	CPPUNIT_TEST(test_deque_default_constructor2);
+	CPPUNIT_TEST(test_deque_constructor1);
+	CPPUNIT_TEST(test_deque_constructor2);
+	CPPUNIT_TEST(test_deque_copy_constructor1);
+	CPPUNIT_TEST(test_deque_copy_constructor2);
+	CPPUNIT_TEST(test_deque_assignment1);
+	CPPUNIT_TEST(test_deque_assignment2);
+	CPPUNIT_TEST(test_deque_subscript1);
+	CPPUNIT_TEST(test_deque_subscript2);
+	CPPUNIT_TEST(test_deque_back1);
+	CPPUNIT_TEST(test_deque_back2);
+	CPPUNIT_TEST(test_deque_empty1);
+        CPPUNIT_TEST(test_deque_empty2);
+	CPPUNIT_TEST(test_deque_size1);
+	CPPUNIT_TEST(test_deque_size2);
+	CPPUNIT_TEST(test_deque_iterator1);
+	CPPUNIT_TEST(test_deque_iterator2);
+	CPPUNIT_TEST(test_deque_swap1);
+	CPPUNIT_TEST(test_deque_equal1);
+	CPPUNIT_TEST(test_deque_resize1);
+	CPPUNIT_TEST(test_deque_resize2);
+	CPPUNIT_TEST(test_deque_insert1);
+	CPPUNIT_TEST(test_deque_insert2);
+	CPPUNIT_TEST(test_deque_erase1);
+	CPPUNIT_TEST(test_deque_erase2);
+       	CPPUNIT_TEST(test_deque_pop_back1);
+	CPPUNIT_TEST(test_deque_pop_back2);
+	CPPUNIT_TEST(test_deque_pop_front1);
+	CPPUNIT_TEST(test_deque_pop_front2);
+	CPPUNIT_TEST(test_deque_push_front1);
+	CPPUNIT_TEST(test_deque_push_back1);
+
+
     CPPUNIT_TEST_SUITE_END();};
 
 #endif // TestDeque_h
