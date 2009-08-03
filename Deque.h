@@ -619,13 +619,21 @@ public:
 	 * @param a: Allocator instance
 	 */
 	Deque (const Deque& that) : a(that.a) {
+	        if(that.empty()){
+		b = e = b_a = e_a = 0;
+		d_size = 0;
+		}
+		else{
 		d_size = that.d_size;
 		b_a = this->a.allocate( d_size + 1);
 		e_a = b_a + d_size + 1;
 		b = b_a +  ( (e_a - b_a)  / 2);
 		e = b-1;
 		uninitialized_copy(a, that.begin(), that.end(), begin());
-		assert(valid());}
+		}
+		assert(valid());
+		
+		}
 
 	// ----------
 	// destructor
@@ -858,7 +866,6 @@ public:
 			*it = * (it + 1);
 			++it;
 			}
-	        assert(it == end() -1);
 		pop_back();
 		}
 		assert(valid());
@@ -891,6 +898,7 @@ public:
 	 * @return iterator to location where the insertion was made
 	 */
 	iterator insert (iterator it1, const_reference v) {
+		iterator it = begin();
 		if(it1==begin()){
 			push_front(v);
 			return begin();}
@@ -899,12 +907,12 @@ public:
 			return (end()-1);}
 		else{ //inserting at the middle
 		// need to count the offset of it to it1
-		iterator it = begin();
 		difference_type diff = 0;
-			while(it != it1){
-		        ++diff; ++it;
-			}	
-		push_front(0);
+		while(it != it1){
+		++diff; ++it;
+		}
+		push_front(v);
+		//new begin() because of the resizing possibility
 		it = begin();
 		it1 = it + diff;
 		  while(it != it1){
@@ -914,7 +922,7 @@ public:
 		*it = v;
 		}
 		assert(valid());
-		return it1;}
+		return it;}
 
 	// ---
 	// pop
@@ -932,6 +940,7 @@ public:
 	 * removes the element in front
 	 */
 	void pop_front () {
+	        assert(!empty());
 	        iterator it = begin();
 		if( (it+1) == end()){
 			clear(); return;
@@ -961,7 +970,6 @@ public:
 		size_type temp = d_size;
 		if( (it - 1) == end() ){
 		     resize(2 * size());
-		     it = begin();
 		}
 		    it = begin();
 		     --it;
@@ -1016,7 +1024,7 @@ public:
 			d_size = s;
 			return;
 		}
-		if(size() == 0 && s < capacity() ){
+		else if(size() == 0 && s < capacity() ){
 		    size_type b2e_a = e_a - b;
 		    if(s < (b2e_a)){
 			e = uninitialized_fill(a, b, b + s, v);
