@@ -34,7 +34,9 @@ struct TestDeque : CppUnit::TestFixture {
       My::Deque<int> x;
       CPPUNIT_ASSERT(x.size() == 0);
       CPPUNIT_ASSERT(x.empty());
-    }
+	  std::deque<int> a(1,2);
+	  My::Deque<std::deque<int> > y(10,a);
+	}
     void test_def_constructor2(){
       My::Deque<char> x;
       CPPUNIT_ASSERT(x.size() == 0);
