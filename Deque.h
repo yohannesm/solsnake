@@ -112,7 +112,7 @@ public:
 	 * output is true if the elements inside the arrays are all the same. false, otherwise.
 	 */
 	friend bool operator == (const Deque& lhs, const Deque& rhs) {
-		return std::equal(lhs.begin(), lhs.end(), rhs.begin());}
+		return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());}
 
 	// ----------
 	// operator <
@@ -150,7 +150,7 @@ private:
 
 	bool valid () const {
 		return (!b && !e && !b_a && !e_a) ||
-		(b!=e &&  b_a < e_a && b < e_a && e < e_a); }
+		(b_a < e_a && b < e_a && e < e_a); }
 
 public:
 	// --------
@@ -963,6 +963,7 @@ public:
 		     resize(2 * size());
 		     it = begin();
 		}
+		    it = begin();
 		     --it;
 		     *it = v;
 		     b = it.p;
@@ -1011,19 +1012,28 @@ public:
 		if(s == 0){
 			it = destroy(a, it, this->end());
 			b = b_a +  ( (e_a - b_a)  / 2);
-			e = b+1;
+			e = b;
 			d_size = s;
+			return;
+		}
+		if(size() == 0 && s < capacity() ){
+		    size_type b2e_a = e_a - b;
+		    if(s < (b2e_a)){
+			e = uninitialized_fill(a, b, b + s, v);
+			}
+		    else{ // need to wrap around
+		        size_type t = s - b2e_a;
+		    	pointer b_copy = b;
+			b_copy = uninitialized_fill(a, b, b + b2e_a, v);
+			e = uninitialized_fill(a, b_a, b_a + t, v);
+		    }
+			d_size = s;  
+			return;
 		}
 		if (s == d_size) return;
 		if (s < size() ){
 			it += s;
 			it = destroy(a, it, this->end());
-			/*if(s == 0){
-			b = e = b_a = e_a = 0;
-			}
-		else{
-			e = it.p;
-			}*/
 			e = it.p;
 			d_size = s;
 		}
