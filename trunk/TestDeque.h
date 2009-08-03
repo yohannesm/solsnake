@@ -394,7 +394,7 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	void test_deque_default_constructor2 () {
 		using namespace My;
-		Deque<std::string> a;
+		Deque<char> a;
 	}
 	void test_deque_constructor1 () {
 		using namespace My;
@@ -405,10 +405,10 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	void test_deque_constructor2 () {
 		using namespace My;
-		Deque<std::string> a(9);
-		Deque<std::string> b(10);
-		Deque<std::string> c(9, "abc");
-		Deque<std::string> d(10, "wxyz");
+		Deque<char> a(9);
+		Deque<char> b(10);
+		Deque<char> c(9, 'a');
+		Deque<char> d(10, 'w');
 	}
 	void test_deque_copy_constructor1 () {
 		using namespace My;
@@ -423,14 +423,14 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	void test_deque_copy_constructor2 () {
 		using namespace My;
-		Deque<std::string> a(9);
-		Deque<std::string> b(a);
-		Deque<std::string> c(9, "abc");
-		Deque<std::string> d(c);
-		Deque<std::string> e(10);
-		Deque<std::string> f(e);
-		Deque<std::string> g(10, "wxyz");
-		Deque<std::string> h(g);
+		Deque<char> a(9);
+		Deque<char> b(a);
+		Deque<char> c(9, 'a');
+		Deque<char> d(c);
+		Deque<char> e(10);
+		Deque<char> f(e);
+		Deque<char> g(10, 'w');
+		Deque<char> h(g);
 	}
 	
 	// ----------
@@ -468,18 +468,14 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	void test_deque_subscript2 () {
 		using namespace My;
-		Deque<std::string> a(9);
-		CPPUNIT_ASSERT(a[0] == "");
-		CPPUNIT_ASSERT(a[8] == "");
-		Deque<std::string> b(10);
-		CPPUNIT_ASSERT(b[0] == "");
-		CPPUNIT_ASSERT(b[9] == "");
-		Deque<std::string> c(9, "abc");
-		CPPUNIT_ASSERT(c[0] == "abc");
-		CPPUNIT_ASSERT(c[8] == "abc");
-		Deque<std::string> d(10, "wxyz");
-		CPPUNIT_ASSERT(d[0] == "wxyz");
-		CPPUNIT_ASSERT(d[9] == "wxyz");
+		Deque<char> a(9);
+		Deque<char> b(10);
+		Deque<char> c(9, 'a');
+		CPPUNIT_ASSERT(c[0] == 'a');
+		CPPUNIT_ASSERT(c[8] == 'a');
+		Deque<char> d(10, 'w');
+		CPPUNIT_ASSERT(d[0] == 'w');
+		CPPUNIT_ASSERT(d[9] == 'w');
 	}
 	
 	// ----
@@ -504,18 +500,16 @@ struct TestDeque : CppUnit::TestFixture {
 	
 	void test_deque_back2 () {
 		using namespace My;
-		Deque<std::string> a(9);
-		CPPUNIT_ASSERT(a.back() == "");
-		Deque<std::string> b(a);
-		CPPUNIT_ASSERT(b.back() == "");
-		Deque<std::string> c(9, "abc");
-		CPPUNIT_ASSERT(c.back() == "abc");
-		Deque<std::string> d(c);
-		CPPUNIT_ASSERT(d.back() == "abc");
-		Deque<std::string> e(10, "xyz");
-		CPPUNIT_ASSERT(e.back() == "xyz");
-		Deque<std::string> f(e);
-		CPPUNIT_ASSERT(f.back() == "xyz");
+		Deque<char> a(9);
+		Deque<char> b(a);
+		Deque<char> c(9, 'a');
+		CPPUNIT_ASSERT(c.back() == 'a');
+		Deque<char> d(c);
+		CPPUNIT_ASSERT(d.back() == 'a');
+		Deque<char> e(10, 'x');
+		CPPUNIT_ASSERT(e.back() == 'x');
+		Deque<char> f(e);
+		CPPUNIT_ASSERT(f.back() == 'x');
 	}
 	
 	// --------
@@ -554,17 +548,17 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	void test_deque_size2 () {
 		using namespace My;
-		Deque<std::string> a;
+		Deque<char> a;
 		CPPUNIT_ASSERT(a.size() == 0);
-		Deque<std::string> b(a);
+		Deque<char> b(a);
 		CPPUNIT_ASSERT(b.size() == 0);
-		Deque<std::string> c(9);
+		Deque<char> c(9);
 		CPPUNIT_ASSERT(c.size() == 9);
-		Deque<std::string> d(c);
+		Deque<char> d(c);
 		CPPUNIT_ASSERT(d.size() == 9);
-		Deque<std::string> e(10, "abc");
+		Deque<char> e(10, 'a');
 		CPPUNIT_ASSERT(e.size() == 10);
-		Deque<std::string> f(e);
+		Deque<char> f(e);
 		CPPUNIT_ASSERT(f.size() == 10);
 	}
 	
@@ -590,17 +584,17 @@ struct TestDeque : CppUnit::TestFixture {
 	
 	void test_deque_empty2 () {
 		using namespace My;
-		Deque<std::string> a;
+		Deque<char> a;
 		CPPUNIT_ASSERT(a.empty());
-		Deque<std::string> b(a);
+		Deque<char> b(a);
 		CPPUNIT_ASSERT(b.empty());
-		Deque<std::string> c(9);
+		Deque<char> c(9);
 		CPPUNIT_ASSERT(!c.empty());
-		Deque<std::string> d(c);
+		Deque<char> d(c);
 		CPPUNIT_ASSERT(!d.empty());
-		Deque<std::string> e(10, "abc");
+		Deque<char> e(10, 'a');
 		CPPUNIT_ASSERT(!e.empty());
-		Deque<std::string> f(e);
+		Deque<char> f(e);
 		CPPUNIT_ASSERT(!f.empty());
 	}
 	
@@ -648,10 +642,10 @@ struct TestDeque : CppUnit::TestFixture {
 
 	void test_deque_resize2 () {
 		using namespace My;
-		Deque<std::string> a(10,"abc");
+		Deque<char> a(10,'a');
 		a.resize(5);
 		CPPUNIT_ASSERT(a.size() == 5);
-		Deque<std::string> b(10,"abc");
+		Deque<char> b(10,'a');
 		b.resize(20);
 		CPPUNIT_ASSERT(b.size() == 20);
 	}
@@ -693,10 +687,10 @@ struct TestDeque : CppUnit::TestFixture {
 
 	void test_deque_erase2 () {
 		using namespace My;
-		Deque<std::string> a(3,"abc");
+		Deque<char> a(3,'a');
 		a.erase(a.begin()+1);
 		CPPUNIT_ASSERT(a.size() == 2);
-		Deque<std::string> b(4,"xyz");
+		Deque<char> b(4,'x');
 		b.erase(b.begin());
 		CPPUNIT_ASSERT(b.size() == 3);
 	}
@@ -713,7 +707,7 @@ struct TestDeque : CppUnit::TestFixture {
 	}
 	void test_deque_pop_back2 () {
 		using namespace My;
-		Deque<std::string> a(3,"abc");
+		Deque<char> a(3,'a');
 		a.pop_back();
 		CPPUNIT_ASSERT(a.size() == 2);
 	}
@@ -731,7 +725,7 @@ struct TestDeque : CppUnit::TestFixture {
 
 	void test_deque_pop_front2 () {
 		using namespace My;
-		Deque<std::string> a(3,"abc");
+		Deque<char> a(3,'a');
 		a.pop_front();
 		CPPUNIT_ASSERT(a.size() == 2);
 	}
@@ -746,6 +740,14 @@ struct TestDeque : CppUnit::TestFixture {
 		a.push_front(456);
 		CPPUNIT_ASSERT(a.size() == 4);
 		CPPUNIT_ASSERT(a.at(0) == 456);
+	}
+	
+	void test_deque_push_front2 () {
+		using namespace My;
+		Deque<char> a(3,'a');
+		a.push_front('b');
+		CPPUNIT_ASSERT(a.size() == 4);
+		CPPUNIT_ASSERT(a.at(0) == 'b');
 	}
 	
 	// ----------
@@ -835,6 +837,7 @@ struct TestDeque : CppUnit::TestFixture {
 	CPPUNIT_TEST(test_deque_pop_front1);
 	CPPUNIT_TEST(test_deque_pop_front2);
 	CPPUNIT_TEST(test_deque_push_front1);
+	CPPUNIT_TEST(test_deque_push_front2);
 	CPPUNIT_TEST(test_deque_push_back1);
 
 
