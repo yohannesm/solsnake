@@ -320,7 +320,7 @@ public:
 		 * @return incremented iterator
 		 */
 		iterator& operator += (difference_type d) {
-			difference_type a = d % (deque_ptr->d_size);
+			difference_type a = d; //% (deque_ptr->d_size);
 			while(a){
 				++(*this);
 				--a;
@@ -349,7 +349,7 @@ public:
 		 * @return decremented iterator
 		 */
 		iterator& operator -= (difference_type d) {
-			difference_type a = d % (deque_ptr->d_size);
+			difference_type a = d; //% (deque_ptr->d_size);
 			while(a){
 				--(*this);
 				--a;
@@ -534,7 +534,7 @@ public:
 		 * @return incremented iterator
 		 */
 		const_iterator& operator += (difference_type d) {
-			difference_type a = d % (deque_ptr->d_size);
+			difference_type a = d; //% (deque_ptr->d_size);
 			while(a){
 				++(*this);
 				--a;
@@ -563,7 +563,7 @@ public:
 		 * @return decremented iterator
 		 */
 		const_iterator& operator -= (difference_type d) {
-			difference_type a = d % (deque_ptr->d_size);
+			difference_type a = d; //% (deque_ptr->d_size);
 			while(a){
 				--(*this);
 				--a;
@@ -857,7 +857,7 @@ public:
 		}
 		else if(i == end() - 1){
 			pop_back();
-			return end() -1;
+			return end(); //changed 13/8
 		}
 		else{
 		//erasing at the middle
