@@ -45,7 +45,8 @@ int main () {
     // ----------
 
     CppUnit::TextTestRunner tr;
-    tr.addTest(TestDeque::suite());
+    tr.addTest(TestDeque<My::Deque<int> >::suite());
+	//tr.addTest(TestDeque<std::deque<int> >::suite());
     tr.run();
 
     cout << "Done." << endl;
